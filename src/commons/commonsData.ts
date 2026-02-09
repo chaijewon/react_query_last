@@ -23,7 +23,6 @@ export interface TravelItem {
     hit:number;
     contenttype:number;
 }
-
 export interface MainData{
     main:MainItem;
     sList:TravelItem[];
