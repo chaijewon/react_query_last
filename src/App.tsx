@@ -2,15 +2,21 @@ import React, {Fragment} from 'react';
 import Header from "./components/layout/Header";
 import Home from "./components/layout/Home";
 import Footer from "./components/layout/Footer";
+import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
+import JejuAttractionList from "./components/jeju/JejuAttractionList";
+import JejuAttractionDetail from "./components/jeju/JejuAttractionDetail";
 
 function App() {
   return (
-      <Fragment>
-        <Header />
-        <Home/>
-        <Footer />
-      </Fragment>
-
+      <Router>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home/>} />
+            <Route path="/jeju/attraction" element={<JejuAttractionList/>} />
+            <Route path={"/jeju/detail/:contentid"} element={<JejuAttractionDetail/>}/>
+          </Routes>
+          <Footer />
+      </Router>
 
   );
 }
