@@ -1,8 +1,10 @@
-import express,{Application,Request,Response} from "express";
+import express from "express";
+//import type,{Request,Response} from "express";
+
 import cors from "cors";
 import oracledb ,{Connection} from "oracledb";
 
-const app: Application = express();
+const app = express();
 // CrossOrigin(origins="*")
 app.use(cors({
     origin:"*",
@@ -20,11 +22,11 @@ async function getConnection(){
     return await oracledb.getConnection({
         user:'hr',
         password:'happy',
-        connectionString:'211.238.142.22:1521/xe'
+        connectionString:"211.238.142.22:1521/xe"
     });
 }
 
-app.get("/board/list_node", async  (req:Request, res:Response) => {
+app.get("/board/list_node", async  (req, res) => {
    let conn;
    // /board/list_node?page=1
    const page=parseInt(req.query.page as string)||1
@@ -34,12 +36,25 @@ app.get("/board/list_node", async  (req:Request, res:Response) => {
 
    try {
        conn = await getConnection();
-       const sql=`
+       const listSql=`
                     SELECT no,subject,name,TO_CHAR(regdate,'YYYY-MM-DD') as dbday,hit
                     FROM board
                     ORDER BY no DESC
-                    OFFSET :start ROWS FETCH NEXT 10 ROWS ONLY
+                    OFFSET ${start} ROWS FETCH NEXT 10 ROWS ONLY
                  `
+       const totalSql=`
+                        SELECT CEIL(COUNT(*)/12.0) AS totalpage
+                        FROM board
+                      `
+       const result=await conn.execute(listSql)
+       const total=await  conn.execute(totalSql)
+       const totalpage=(total.rows as {TOTALPAGE:number}[])[0].TOTALPAGE
+       console.log(result.rows)
+       res.json({
+           curpage:page,
+           totalpage,
+           list: result.rows
+       })
    }catch(error){
        console.log(error);
    }
@@ -51,3 +66,29 @@ app.get("/board/list_node", async  (req:Request, res:Response) => {
    }
 })
 
+app.post("/board/insert_node",async (req,res)=>{
+    let conn
+    const {name,subject,content,pwd}=req.body;
+
+    try {
+        conn = await getConnection();
+        const sql=`
+                    INSERT INTO board (no,name,subject,content,pwd)
+                    VALUES(BR_NO_SEQ.nextval,:name,:subject,:content,:pwd)
+                  `
+        await conn.execute(
+             sql,
+             {name,subject,content,pwd},
+             {autoCommit:true}
+            )
+        res.json({msg:'yes'})
+    }catch(err){
+        console.error(err);
+        res.status(500).json({msg:'no'})
+    }
+    finally {
+        if(conn){
+            await conn.close()
+        }
+    }
+})
