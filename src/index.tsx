@@ -19,6 +19,10 @@ const queryClient = new QueryClient({
         }
     }
 })
+/*
+       React.createElement('div', => 자체 (XML) => jsx tsx
+
+ */
 root.render(
     <QueryClientProvider client={queryClient}>
         <App />

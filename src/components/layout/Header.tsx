@@ -40,7 +40,12 @@ function Header() {
         id?:string;
         name?:string;
     }
-    // 로그인 버튼 클릭
+    // 1. 결과값 받는 경우 => interface / type
+    // 2. 함수의 리턴형
+    // 3. 매개변수의 데이터형
+    // ?.   데이터명 &&
+    // 일반 => ts HTML 리턴 : tsx
+    // 로그인 버튼 클릭 => 일반 데이터형 => <> 제네릭
     const {mutate:loginOk}=useMutation({
         mutationFn:async (data)=>{
             const res:AxiosResponse<LoginData>=await apiClient.get(`/member/login/${id}/${pwd}`)
