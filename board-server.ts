@@ -92,3 +92,31 @@ app.post("/board/insert_node",async (req,res)=>{
         }
     }
 })
+// 상세보기
+app.get("/board/detail_node",async (req,res)=>{
+    let conn
+    const no=req.query.no||1
+    try {
+        conn = await getConnection();
+        const sql1=`UPDATE board SET hit=hit+1 WHERE no=${no}`
+        await conn.execute(
+            sql1,
+            {},
+            {autoCommit:true}
+        )
+
+        const sql2=`SELECT no,subject,TO_CHAR(content) as content,name,hit,
+                    TO_CHAR(regdate,'YYYY-MM-DD') as dbday
+                   FROM board
+                   WHERE no=${no}`
+        const result=await conn.execute(sql2)
+
+        res.json(result.rows?.[0])
+    }catch(err){
+        console.error(err);
+    }finally {
+        if(conn){
+            await conn.close()
+        }
+    }
+})
