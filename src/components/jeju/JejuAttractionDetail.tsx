@@ -93,7 +93,27 @@ function JejuAttractionDetail(){
             console.log("Error발생:",error.message)
         }
     })
-
+    // 수정
+    const {mutate:commentUpdate}=useMutation<DetailProps>({
+        mutationFn: async()=>{
+            const res:AxiosResponse<DetailProps,Error>=await apiClient.put(`/comment/update`,{
+                no:no,
+                msg:umsg
+            })
+            return res.data
+        },
+        onSuccess:(data:DetailProps)=>{
+            jejuDetail()
+            if(umsgRef.current){
+                umsgRef.current.value=''
+            }
+            setIsInsert(true)
+            setIsEdit(false)
+        },
+        onError:(error:Error)=>{
+            console.log("Error발생:",error.message)
+        }
+    })
     if(isLoading){
         return <h1 className={"text-center"}>Loading...</h1>;
     }
@@ -117,6 +137,26 @@ function JejuAttractionDetail(){
     const del=(no:number)=>{
         setNo(no)
         commentDelete()
+    }
+
+    const update=()=>{
+        if(umsg==='')
+        {
+            umsgRef.current?.focus()
+            return
+        }
+        commentUpdate()
+    }
+    const updateData=(no:number,index:number)=>{
+        if(umsgRef.current && comment)
+        {
+            setUmsg(comment[index].msg)
+        }
+            setIsInsert(false)
+
+            setIsEdit(true)
+            setNo(no)
+
     }
     return (
         <Fragment>
@@ -224,7 +264,7 @@ function JejuAttractionDetail(){
                                                             com.id===sessionStorage.getItem("id") &&
                                                             (
                                                                 <span>
-                                                                    <button className="btn-warning btn-sm">수정</button>&nbsp;
+                                                                    <button className="btn-warning btn-sm" onClick={()=>updateData(com.no,index)}>수정</button>&nbsp;
                                                                     <button className="btn-warning btn-sm" onClick={()=>del(com.no)}>삭제</button>
                                                                 </span>
                                                             )
@@ -269,9 +309,14 @@ function JejuAttractionDetail(){
                                         <tbody>
                                         <tr>
                                             <td>
-                                                <textarea rows={4} cols={120} style={{"float": "left"}} />
+                                                <textarea rows={4} cols={120} style={{"float": "left"}}
+                                                 ref={umsgRef}
+                                                 value={umsg}
+                                                 onChange={(e)=>setUmsg(e.target.value)}
+                                                />
                                                 <button className={"btn-primary"}
-                                                        style={{"float":"left","width":"100px","height":"100px"}}>댓글수정</button>
+                                                        style={{"float":"left","width":"100px","height":"100px"}}
+                                                onClick={()=>update()}>댓글수정</button>
                                             </td>
                                         </tr>
                                         </tbody>
