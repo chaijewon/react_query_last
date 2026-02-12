@@ -120,3 +120,109 @@ app.get("/board/detail_node",async (req,res)=>{
         }
     }
 })
+
+app.get("/board/update_node",async (req,res)=>{
+    let conn
+    const no=req.query.no
+    try {
+           // 오라클 연동
+           conn = await getConnection();
+           const sql=`
+             SELECT no,name,subject,TO_CHAR(content) as content FROM board
+             WHERE no=${no}
+           `
+           const result= await conn.execute(sql)
+           console.log(result)
+           res.json(result.rows?.[0])
+
+    }catch(err){
+        console.error(err);
+    }
+    finally {
+        if(conn){
+            await conn.close()
+        }
+    }
+
+})
+// 실제 수정
+app.put("/board/update_ok_node",async (req,res)=>{
+    let conn
+    const {no, name,subject,content,pwd}=req.body;
+    try {
+          conn = await getConnection();
+          const checkSql=`SELECT COUNT(*) as res FROM board
+                     WHERE no=${no} AND pwd=${pwd}
+                `
+          const check=await conn.execute(checkSql)
+          console.log(check.rows)
+          //console.log(check.rows?[0][0])
+          const count=(check.rows as any[])[0].RES
+
+          if( count === 0)
+          {
+              //console.log("비밀번호가 틀립니다:"+count)
+              res.json({msg:'no'})
+              return
+          }
+          const updateSql=`UPDATE board SET 
+                     name='${name}',
+                     subject='${subject}',
+                     content='${content}'
+                   WHERE no=${no}
+                 `
+          await conn.execute(
+              updateSql,
+              {},
+              {autoCommit:true}
+          )
+          res.json({msg:'yes'})
+    }catch(err){
+        console.error(err);
+    }
+    finally {
+        if(conn){
+            await conn.close()
+        }
+    }
+})
+
+app.delete("/board/delete_node/:no/:pwd",async (req,res)=>{
+    const no=req.params.no
+    const pwd=req.params.pwd
+
+    let conn
+    try {
+         conn = await getConnection();
+        const checkSql=`SELECT COUNT(*) as res FROM board
+                     WHERE no=${no} AND pwd=${pwd}
+                `
+        const check=await conn.execute(checkSql)
+        console.log(check.rows)
+        //console.log(check.rows?[0][0])
+        const count=(check.rows as any[])[0].RES
+
+        if( count === 0)
+        {
+            res.json({msg:'no'})
+            return
+        }
+
+        const deleteSql=`DELETE FROM board 
+                         WHERE no=${no}
+                  `
+        await conn.execute(deleteSql,{},{autoCommit:true})
+
+        res.json({msg:'yes'})
+
+
+    }catch(err){
+        console.error(err);
+    }
+    finally {
+        if(conn){
+            await conn.close()
+        }
+    }
+
+})

@@ -2,6 +2,7 @@ import {useState,useEffect,useRef,Fragment} from "react";
 import {useQuery,useMutation} from "@tanstack/react-query";
 import boardClient from "../../board-commons";// 서버 연결
 import {useNavigate} from "react-router-dom";//화면 이동
+import {AxiosResponse,AxiosError} from "axios";
 
 /*
     1. 발전 속도가 빠르다
@@ -86,7 +87,7 @@ function BoardInsert(){
 
             <section className="archive-area section_padding_80">
                 <div className="container">
-                    <div className="row">
+                    <div className="row" style={{"width": "600px","margin": "0px auto"}}>
                       <table className="table">
                           <tbody>
                               <tr>

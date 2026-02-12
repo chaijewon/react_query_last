@@ -8,6 +8,8 @@ import JejuAttractionDetail from "./components/jeju/JejuAttractionDetail";
 import BoardList from "./components/board/BoardList";
 import BoardInsert from "./components/board/BoardInsert";
 import BoardDetail from "./components/board/BoardDetail";
+import BoardUpdate from "./components/board/BoardUpdate";
+import BoardDelete from "./components/board/BoardDelete";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
             <Route path="/board/list" element={<BoardList/>}/>
             <Route path="/board/insert" element={<BoardInsert/>}/>
             <Route path="/board/detail/:no" element={<BoardDetail/>}/>
+            <Route path="/board/update/:no" element={<BoardUpdate/>}/>
+            <Route path="/board/delete/:no" element={<BoardDelete/>}/>
           </Routes>
           <Footer />
       </Router>
