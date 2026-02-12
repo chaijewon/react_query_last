@@ -221,9 +221,12 @@ function Header() {
                                                 <Link className="nav-link" to={"/chat/chatbot"}>챗봇</Link>
                                             </li>
                                         }
-
-                                        <li className="nav-item">
-                                            <Link className="nav-link" to="/youtube/find">동영상검색</Link>
+                                        <li className="nav-item dropdown">
+                                            <a className="nav-link dropdown-toggle" href="#" id="yummyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">검색</a>
+                                            <div className="dropdown-menu" aria-labelledby="yummyDropdown">
+                                                <Link className="nav-link" to="/youtube/find">동영상검색</Link>
+                                                <Link className="nav-link" to="/news/find">뉴스검색</Link>
+                                            </div>
                                         </li>
                                         <li className="nav-item">
                                             <Link className="nav-link" to={"/board/list"}>커뮤니티</Link>

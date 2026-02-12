@@ -6,15 +6,18 @@ import {YoutubeItem} from "../../commons/commonsData";
 function YoutubeFind(){
     const [fd,setFd] = useState<string>("제주여행");
     const fdRef = useRef<HTMLInputElement>(null);
-    const {isLoading,isError,error,data}=useQuery({
-        queryKey:['youtube',fd],
+    const {isLoading,isError,error,data,refetch:find}=useQuery({
+        queryKey:['youtube'],
         queryFn:()=>YoutubeApi(fd)
     })
 
-    const findClick=(e:Event)=>{
+    const findClick=()=>{
         if(!fd.trim())
             return fdRef.current?.focus();
-        //setFd(e.currentTarget.value)
+        if(fdRef.current){
+            setFd(fdRef.current?.value)
+        }
+        find()
     }
 
 
@@ -43,8 +46,9 @@ function YoutubeFind(){
                     <div className="row">
                         <div className="col-12">
                             <input type={"text"} size={20} className={"input-sm"}
-                              value={fd}
                               ref={fdRef}
+                              onChange={(e)=>setFd(e.target.value)}
+                              value={fd}
                             />
                             <button className={"btn-sm btn-outline-primary"} onClick={findClick}>검색</button>
                         </div>
@@ -54,7 +58,7 @@ function YoutubeFind(){
 
             <section className="archive-area section_padding_80">
                 <div className="container">
-                    <div className="row" style={{"width": "400px","margin": "0px auto"}}>
+                    <div className="row" style={{"width": "900px","margin": "0px auto"}}>
                         {
                             data?.items.map((item:YoutubeItem)=>
                                <div className="col-12" key={item.id.videoId}>
@@ -64,7 +68,7 @@ function YoutubeFind(){
                                            src={"https://www.youtube.com/embed/" + item.id.videoId}
                                            title={item.snippet.title}
                                            allowFullScreen={true}
-                                           width="450px" height={"300px"}
+                                           width="850px" height={"450px"}
                                          />
 
                                        </div>
