@@ -235,7 +235,7 @@ app.get('/news/find_node', function (req, res) {
     const query = req.query.query as string;
     if(!query)
         return res.status(400).send({message:'검색어가 없습니다'});
-    const api_url = 'https://openapi.naver.com/v1/search/news.json?query=' + encodeURI(query); // JSON 결과
+    const api_url = 'https://openapi.naver.com/v1/search/news.json?display=50&query=' + encodeURI(query); // JSON 결과
 
     const options = {
         url: api_url,

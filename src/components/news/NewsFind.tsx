@@ -39,10 +39,19 @@ function NewsFind() {
     const [fd,setFd] = useState<string>("여행");
     const fdRef=useRef<HTMLInputElement>(null);
     // 서버 연결
-    const {isLoading,isError,error,data}=useQuery<AxiosResponse,Error>({
+    const {isLoading,isError,error,data,refetch:newsFind}=useQuery<AxiosResponse,Error>({
         queryKey:['new-find'],
         queryFn: async ()=> await boardClient.get(`/news/find_node?query=${fd}`)
     })
+    const find=()=>{
+        if(!fd.trim()){
+            return fdRef.current?.focus();
+        }
+        if(fdRef.current){
+            setFd(fdRef.current?.value);
+        }
+        newsFind()
+    }
 
     if(isLoading){
         return <h1 className={"text-center"}>Loading...</h1>;
@@ -69,9 +78,11 @@ function NewsFind() {
                     <div className="row">
                         <div className="col-12">
                             <input type={"text"} size={20} className={"input-sm"}
-
+                              ref={fdRef}
+                              value={fd}
+                              onChange={e=>setFd(e.currentTarget.value)}
                             />
-                            <button className={"btn-sm btn-outline-primary"} >검색</button>
+                            <button className={"btn-sm btn-outline-primary"} onClick={find}>검색</button>
                         </div>
                     </div>
                 </div>
@@ -90,7 +101,7 @@ function NewsFind() {
                                           <table className="table table-striped">
                                               <tbody>
                                                <tr>
-                                                   <td><a href={item.link}><h3 style={{"color":"orange"}} dangerouslySetInnerHTML={{__html:item.title}}></h3></a></td>
+                                                   <td><a href={item.link}><h4 style={{"color":"orange"}} dangerouslySetInnerHTML={{__html:item.title}}></h4></a></td>
                                                </tr>
                                                <tr>
                                                   <td dangerouslySetInnerHTML={{__html:item.description}}></td>
