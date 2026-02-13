@@ -87,7 +87,7 @@ function Header() {
         {
             setLogin(true)
         }
-    })
+    },[])
 
     const memberLogin=()=>{
         if(!id || id.trim()==="")

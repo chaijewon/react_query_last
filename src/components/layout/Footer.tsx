@@ -1,4 +1,3 @@
-import {Fragment} from 'react'
 
 function Footer() {
     return (

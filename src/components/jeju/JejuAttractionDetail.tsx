@@ -1,9 +1,9 @@
-import {useState, Fragment, useRef, ChangeEvent} from "react";
+import {useState, Fragment, useRef} from "react";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {useNavigate,useParams} from 'react-router-dom'
-import {JejuData,JejuItem} from "../../commons/commonsData";
+import {JejuItem} from "../../commons/commonsData";
 import apiClient from "../../http-commons";
-import {AxiosResponse,AxiosError} from "axios";
+import {AxiosResponse} from "axios";
 import MapPrint from "../../commons/MapPrint";
 /*
    1. React = tanstack-query
@@ -285,7 +285,7 @@ function JejuAttractionDetail(){
                             </tbody>
                         </table>
                         {
-                            sessionStorage.getItem("id") && isInsert===true &&
+                            sessionStorage.getItem("id") && isInsert &&
                                 (
                                     <table className="table">
                                         <tbody>

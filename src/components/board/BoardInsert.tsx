@@ -1,8 +1,8 @@
-import {useState,useEffect,useRef,Fragment} from "react";
-import {useQuery,useMutation} from "@tanstack/react-query";
+import {useState,useRef,Fragment} from "react";
+import {useMutation} from "@tanstack/react-query";
 import boardClient from "../../board-commons";// 서버 연결
 import {useNavigate} from "react-router-dom";//화면 이동
-import {AxiosResponse,AxiosError} from "axios";
+
 
 /*
     1. 발전 속도가 빠르다

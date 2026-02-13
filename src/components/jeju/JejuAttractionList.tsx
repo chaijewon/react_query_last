@@ -2,7 +2,7 @@ import {useState,Fragment} from "react";
 import {useQuery} from "@tanstack/react-query";
 import apiClient from "../../http-commons";
 import {Link} from "react-router-dom";
-import axios, {AxiosResponse} from "axios";
+import {AxiosResponse} from "axios";
 import {JejuItem,JejuData} from "../../commons/commonsData"
 import PagePrint from "../../commons/PagePrint";
 

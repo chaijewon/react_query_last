@@ -1,6 +1,5 @@
-import {useState} from "react";
 import {useQuery} from "@tanstack/react-query";
-import {MainData,MainItem,TravelItem} from "../../commons/commonsData";
+import {MainData,TravelItem} from "../../commons/commonsData";
 import apiClient from "../../http-commons";
 function Home() {
     const {isLoading,isError,error,data}=useQuery<{data:MainData},Error>({
@@ -30,7 +29,7 @@ function Home() {
                     </div>
                     <div className="col-12 col-md-6 col-lg-4">
                         <div className="single_catagory wow fadeInUp" data-wow-delay=".6s">
-                            <img src="../../img/busan.jpg" style={{"width": "330px","height": "238px"}}/>
+                            <img src="../../img/busan.jpg" style={{"width": "330px","height": "238px"}} alt={""}/>
                             <div className="catagory-title">
                                 <a href="#">
                                     <h5>부산여행코스</h5>

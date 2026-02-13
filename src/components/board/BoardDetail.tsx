@@ -1,6 +1,6 @@
-import {useParams,useNavigate,Link,useNavigationType} from "react-router-dom";
+import {useParams,Link,useNavigationType} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
-import {useEffect,Fragment} from "react";
+import {Fragment} from "react";
 import boardClient from "../../board-commons";
 interface BoardDetailProps {
     NO: number;
@@ -13,7 +13,6 @@ interface BoardDetailProps {
 
 function BoardDetail(){
     const {no} =useParams();
-    const nav=useNavigate();
     const type=useNavigationType()
     console.log(type)
     const {isLoading,isError,error,data}=useQuery<{data:BoardDetailProps}>({

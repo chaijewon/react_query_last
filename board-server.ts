@@ -1,8 +1,7 @@
 import express from "express";
-//import type,{Request,Response} from "express";
 
 import cors from "cors";
-import oracledb ,{Connection} from "oracledb";
+import oracledb  from "oracledb";
 import request from "request";
 
 const app = express();
@@ -73,10 +72,7 @@ app.post("/board/insert_node",async (req,res)=>{
 
     try {
         conn = await getConnection();
-        const sql=`
-                    INSERT INTO board (no,name,subject,content,pwd)
-                    VALUES(BR_NO_SEQ.nextval,:name,:subject,:content,:pwd)
-                  `
+        const sql=`INSERT INTO board (no,name,subject,content,pwd) VALUES(BR_NO_SEQ.nextval,:name,:subject,:content,:pwd)`
         await conn.execute(
              sql,
              {name,subject,content,pwd},
@@ -152,6 +148,7 @@ app.put("/board/update_ok_node",async (req,res)=>{
     const {no, name,subject,content,pwd}=req.body;
     try {
           conn = await getConnection();
+
           const checkSql=`SELECT COUNT(*) as res FROM board
                      WHERE no=${no} AND pwd=${pwd}
                 `
@@ -242,7 +239,7 @@ app.get('/news/find_node', function (req, res) {
         headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
     };
     request.get(options, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
+        if (!error && response.statusCode === 200) {
             res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
             console.log(body);
             res.end(body);
